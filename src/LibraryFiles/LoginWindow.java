@@ -44,6 +44,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 //        add action listeners
         loginButton.addActionListener(this);
         clearButton.addActionListener(this);
+        registerButton.addActionListener(this);
 
 
         this.setLayout(new BorderLayout());
@@ -76,15 +77,18 @@ public class LoginWindow extends JFrame implements ActionListener {
                     this.setVisible(false);
                 }else{
                     JOptionPane.showMessageDialog(null, "Zły login lub hasło ty tępy chuju");
+
                 }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
+
             }
 
 
 
         } else if (e.getSource() == registerButton) {
-
+            System.out.println("register");
+            new RegisterWindow().setVisible(true);
         } else if (e.getSource() == clearButton) {
             this.loginTextField.setText("");
             this.passwordField.setText("");
