@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginWindow extends JFrame implements ActionListener {
 
@@ -56,6 +58,38 @@ public class LoginWindow extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == loginButton){
 
+            DatabaseConnector databaseConnector = new DatabaseConnector();
+            String login = loginTextField.getText();
+            String password = String.valueOf(passwordField.getPassword());
+            String queryGenerator =
+                    "select * from loggins where login = '" + login + "' and password = '" + password + "';";
+            System.out.println(queryGenerator);
+            try {
+                ResultSet resultSet = databaseConnector.statement.executeQuery(queryGenerator);
+//                checking email and password
+                if (resultSet.next()){
+                    String loginLogged = resultSet.getString("login");
+                    System.out.println(loginLogged);
+                    new LibraryDesktop(loginLogged).setVisible(true);
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Zły login lub hasło ty tępy chuju");
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+
+
+        } else if (e.getSource() == registerButton) {
+
+        } else if (e.getSource() == clearButton) {
+            this.loginTextField.setText("");
+            this.passwordField.setText("");
+        }else{
+            System.out.println("something went wrong");
+        }
     }
 }
