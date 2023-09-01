@@ -47,9 +47,13 @@ public class LoginWindow extends JFrame implements ActionListener {
         registerButton.addActionListener(this);
 
 
+        Dimension rozdzielnosc = Toolkit.getDefaultToolkit().getScreenSize();
+        int widthScreen = (int) rozdzielnosc.getWidth();
+        int highScreen = (int) rozdzielnosc.getHeight();
+
         this.setLayout(new BorderLayout());
         this.setSize(400, 310);
-        this.setLocation(300, 310);
+        this.setLocation(widthScreen / 2 - 200, highScreen / 2 - 155);
         this.setVisible(true);
     }
 
