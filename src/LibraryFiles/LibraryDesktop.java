@@ -19,8 +19,8 @@ public class LibraryDesktop extends JFrame {
         int windowWidth = 1000;
         int windowHigh = 600;
 
-        int locationWindowWidth = (int) rozdzielnosc.getWidth() / 2 - windowWidth / 2;
-        int locationWindowHeight = (int) rozdzielnosc.getHeight() / 2 - windowHigh / 2;
+        int locationWindowWidth = widthScreen / 2 - windowWidth / 2;
+        int locationWindowHeight = highScreen / 2 - windowHigh / 2;
 
         this.setBounds(locationWindowWidth, locationWindowHeight, windowWidth, windowHigh);
         this.setVisible(true);
@@ -31,7 +31,30 @@ public class LibraryDesktop extends JFrame {
         JLabel backgroundLabel = new JLabel(ic2);
         this.add(backgroundLabel);
 
+//        Menu
 
+        JMenu staffJMenu = createJMenu("Staff", "Staff edition, Add  staff, Logging and book borrowing");
+        JMenu libraryJMenu = createJMenu("Library","Borrow book, return book");
+        JMenu inventoryJMenu = createJMenu("Inventory","Add book to inventory, Remove book from inventory");
+        JMenu bookDataBaseJMenu = createJMenu("Book Database","Book Database");
+        JMenu settingsJMenu = createJMenu("Settings", "Your Profile, maximum borrowing, book overkeeping fee");
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(staffJMenu);
+        menuBar.add(libraryJMenu);
+        menuBar.add(inventoryJMenu);
+        menuBar.add(bookDataBaseJMenu);
+        menuBar.add(settingsJMenu);
+        this.setJMenuBar(menuBar);
+
+    }
+
+    public static JMenu createJMenu (String JMenuName, String menuIngredients){
+        JMenu menu = new JMenu(JMenuName);
+        String [] tablicaMenuItemow = menuIngredients.split(", ");
+        for (String s : tablicaMenuItemow) {
+            menu.add(s);
+        }
+        return menu;
     }
 
     public static void main(String[] args) {
