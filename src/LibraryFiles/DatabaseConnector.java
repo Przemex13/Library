@@ -14,7 +14,7 @@ Statement statement;
     public DatabaseConnector() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1", "root","");
+            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarytest", "root","");
             this.statement = connection.createStatement();
             System.out.println(this.statement);
         } catch (ClassNotFoundException | SQLException e) {
