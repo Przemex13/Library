@@ -12,7 +12,7 @@ public class LoginWindow extends JFrame implements ActionListener {
     JLabel loginLabel, passwordLabel;
     JTextField loginTextField;
     JPasswordField passwordField;
-    JButton loginButton, clearButton, registerButton;
+    JButton loginButton, clearButton;
 
 
     public LoginWindow() {
@@ -44,7 +44,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 //        add action listeners
         loginButton.addActionListener(this);
         clearButton.addActionListener(this);
-        registerButton.addActionListener(this);
 
 
         Dimension rozdzielnosc = Toolkit.getDefaultToolkit().getScreenSize();
