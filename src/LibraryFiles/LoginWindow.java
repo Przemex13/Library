@@ -81,7 +81,7 @@ public class LoginWindow extends JFrame implements ActionListener {
                     new LibraryDesktop(loginLogged).setVisible(true);
                     this.setVisible(false);
                 }else{
-                    JOptionPane.showMessageDialog(null, "Zły login lub hasło ty tępy chuju");
+                    JOptionPane.showMessageDialog(null, "invalid credentials");
 
                 }
             } catch (SQLException ex) {
