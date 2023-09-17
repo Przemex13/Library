@@ -83,7 +83,9 @@ public class LibraryDesktop extends JFrame implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == editJMenuItem) {}
+        if (e.getSource() == editJMenuItem) {
+            new StaffLibraryTable();
+        }
         else if (e.getSource() == addWorkerJMenuItem) {
             new AddStaffWindow().setVisible(true);
         }
