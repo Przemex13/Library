@@ -66,29 +66,12 @@ public class LoginWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton){
 
-            DatabaseConnector databaseConnector = new DatabaseConnector();
-            String login = loginTextField.getText();
-            String password = String.valueOf(passwordField.getPassword());
-            String queryGenerator =
-                    "select * from loggintable where login = '" + login + "' and password = '" + password + "';";
-            System.out.println(queryGenerator);
-            try {
-                ResultSet resultSet = databaseConnector.statement.executeQuery(queryGenerator);
-//                checking email and password
-                if (resultSet.next()){
-                    String loginLogged = resultSet.getString("login");
-                    System.out.println(loginLogged);
-                    new LibraryDesktop(loginLogged).setVisible(true);
-                    this.setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(null, "invalid credentials");
-
-                }
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+            if (DatabaseConnector.logginService(loginTextField.getText(), passwordField.getText())){
+                new LibraryDesktop(loginTextField.getText()).setVisible(true);
+            }
+            else{
 
             }
-
 
 
 //        } else if (e.getSource() == registerButton) {

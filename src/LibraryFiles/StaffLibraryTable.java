@@ -1,55 +1,58 @@
 package LibraryFiles;
 
 
+import net.proteanit.sql.DbUtils;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import java.awt.*;
+import javax.swing.text.TableView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Vector;
 
 public class StaffLibraryTable {
-    private JPanel mainPanel;
-    private JPanel leftBottomPanel;
-    private JPanel rightPanel;
+    private JPanel mainPanel, leftBottomPanel, rightPanel, leftPanel;
     private JTable staffTable;
-    private JTextField idWorkerTextField;
-    private JTextField nameTextField;
-    private JTextField surnameTextField;
-    private JTextField addressTextField;
-    private JTextField postcodeTextField;
-    private JTextField cityTextField;
-    private JButton addButton;
-    private JButton updateButton;
-    private JButton deleteButton;
-    private JButton searchButton;
-    private JTextField loginTextField;
+    private JTextField idWorkerTextField, nameTextField, surnameTextField, addressTextField, postcodeTextField, cityTextField, searchTextField, loginTextField;
+    private JButton addButton, updateButton, deleteButton, clearButton;
     private JPasswordField passwordTextField;
-    private JLabel loginLabel;
-    private JLabel passwordLabel;
-    private JTextField searchTextField;
-    private JLabel searchLabel;
+
     private JScrollPane scrolPane;
-    private JPanel leftPanel;
     private JComboBox statusComboBox;
+    private JLabel searchLabel,loginLabel, passwordLabel;
 
-    private int selectedRow;
+   public void fetchTable(){
+       try {
+           Class.forName("com.mysql.cj.jdbc.Driver");
+           Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarytest","root", "");
+           String str = "SELECT * from stafflist;";
+           Statement statement = connection.createStatement();
+           ResultSet resultSet = statement.executeQuery(str);
+           staffTable.setModel(DbUtils.resultSetToTableModel(resultSet));
 
-
-    public StaffLibraryTable() {
+           resultSet.close();
+           statement.close();
+           connection.close();
+           System.out.println("fetch Table() invoked");
+       } catch (SQLException | ClassNotFoundException e) {
+           throw new RuntimeException(e);
+       }
+   }
+    public StaffLibraryTable() throws SQLException {
         JFrame frame = new JFrame("Staff");
         frame.setContentPane(mainPanel);
         frame.setVisible(true);
-        DatabaseConnector.fetchTable(staffTable);
-        frame.setSize(900,800);
-        frame.pack();
+        frame.setSize(900, 800);
+        fetchTable();
 
+        frame.pack();
         TableRowSorter rowSorter = new TableRowSorter(staffTable.getModel());
         staffTable.setRowSorter(rowSorter);
 
@@ -57,87 +60,97 @@ public class StaffLibraryTable {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 String text = searchTextField.getText();
-                if(!text.trim().equals(0)){
-                    rowSorter.setRowFilter(RowFilter.regexFilter(String.format(".*^%s.*$",text)));
+                if (!text.trim().equals(0)) {
+                    rowSorter.setRowFilter(RowFilter.regexFilter(String.format(".*^%s.*$", text)));
                 }
             }
+
             @Override
             public void removeUpdate(DocumentEvent e) {
                 String text = searchTextField.getText();
-                if(!text.trim().equals(0)){
-                    rowSorter.setRowFilter(RowFilter.regexFilter(String.format(".*^%s.*$",text)));
+                if (!text.trim().equals(0)) {
+                    rowSorter.setRowFilter(RowFilter.regexFilter(String.format(".*^%s.*$", text)));
                 }
             }
+
             @Override
             public void changedUpdate(DocumentEvent e) {
             }
         });
-//        staffTable.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                DatabaseConnector databaseConnector = new DatabaseConnector();
-//                try {
-//                    selectedRow = 0;
-//                    selectedRow = staffTable.getSelectedRow();
-//                    ResultSet resultSet = databaseConnector.statement.executeQuery("select * from stafflist where id_worker =" + staffTable.getModel().getValueAt(selectedRow, 0));
-//                    if(resultSet.next()){
-//                        idWorkerTextField.setText(resultSet.getString(1));
-//                        nameTextField.setText(resultSet.getString(2));
-//                        surnameTextField.setText(resultSet.getString(3));
-//                        addressTextField.setText(resultSet.getString(4));
-//                        postcodeTextField.setText(resultSet.getString(5));
-//                        cityTextField.setText(resultSet.getString(6));
-//                    }
-//                } catch (SQLException ex) {
-//                    throw new RuntimeException(ex);
-//                }
-//            }
-//        });
-
-
+        staffTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = staffTable.getSelectedRow();
+                TableModel tableModel = staffTable.getModel();
+                nameTextField.setText((String) tableModel.getValueAt(selectedRow, 1));
+                surnameTextField.setText((String) tableModel.getValueAt(selectedRow, 2));
+                addressTextField.setText((String) tableModel.getValueAt(selectedRow, 3));
+                postcodeTextField.setText((String) tableModel.getValueAt(selectedRow, 4));
+                cityTextField.setText((String) tableModel.getValueAt(selectedRow, 5));
+                loginTextField.setText((String) tableModel.getValueAt(selectedRow, 6));
+            }
+        });
 
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                try {
-                    DatabaseConnector.connect();
-                    String login = loginTextField.getText();
-                    String password = String.valueOf(passwordTextField.getPassword());
-                    ResultSet resultSet = DatabaseConnector.connection.createStatement().executeQuery("select * from loggintable where login = '" + login + "'");
-                    if (resultSet.next()){
-                        JOptionPane.showMessageDialog(null, "Podany login już istnieje");
-                    }else {
-                    PreparedStatement preparedStatement = null;
-                    preparedStatement = DatabaseConnector.connection.prepareStatement
-                            ("insert into stafflist(name, surname, address, postcode, city, login)" +
-                                    "values(?,?,?,?,?,?)");
-                    preparedStatement.setString(1, nameTextField.getText());
-                    preparedStatement.setString(2, surnameTextField.getText());
-                    preparedStatement.setString(3, addressTextField.getText());
-                    preparedStatement.setString(4, postcodeTextField.getText());
-                    preparedStatement.setString(5, cityTextField.getText());
-                    preparedStatement.setString(6, loginTextField.getText());
-//                    preparedStatement.setString(7, passwordTextField.toString());
-                    preparedStatement.executeUpdate();
+                if (DatabaseConnector.loginChecker(loginTextField.getText())) {
+                    if (idWorkerTextField.getText().equals(null) | idWorkerTextField.getText().equals("")) {
+                        String name = nameTextField.getText();
+                        String surname = surnameTextField.getText();
+                        String address = addressTextField.getText();
+                        String postcode = postcodeTextField.getText();
+                        String city = cityTextField.getText();
+                        String login = loginTextField.getText();
+                        String status = statusComboBox.getSelectedItem().toString();
 
-                    PreparedStatement preparedStatement1 = DatabaseConnector.connection.prepareStatement
-                            ("insert into loggintable(login, password, userType)" +
-                            "values(?,?,?)");
-                    preparedStatement1.setString(1, loginTextField.getText());
-                    preparedStatement1.setString(2, String.valueOf(passwordTextField.getPassword()));
-                    preparedStatement1.setString(3, statusComboBox.getSelectedItem().toString());
-                    preparedStatement1.executeUpdate();
+                        String sqlQuery = String.format("insert into stafflist" +
+                                        "(`name`, `surname`, `address`, `postcode`, `city`,`login`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", name, surname, address, postcode,
+                                city, login);
+                        DatabaseConnector databaseConnector = new DatabaseConnector(sqlQuery);
+                        JOptionPane.showMessageDialog(null, "Dodano pracownika");
+                        TableModel tableModel = staffTable.getModel();
+                        System.out.println(tableModel.getRowCount());
+                        DefaultTableModel model = (DefaultTableModel) staffTable.getModel();
+                        model.addRow(new String[]{ name, surname, address, postcode, city, login});
 
-
-
-
-                    JOptionPane.showMessageDialog(null, "Added");
-                    DatabaseConnector.fetchTable(staffTable);
+                        idWorkerTextField.setText("");
+                        nameTextField.setText("");
+                        surnameTextField.setText("");
+                        addressTextField.setText("");
+                        postcodeTextField.setText("");
+                        cityTextField.setText("");
+                        loginTextField.setText("");
+                        nameTextField.requestFocus();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Wciśnij przycisk Clear żę przygotować miejsce na nowy wpis");
                     }
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Podany login jest już zajęty");
+
                 }
+            }
+        });
+
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                idWorkerTextField.setText("");
+                nameTextField.setText("");
+                surnameTextField.setText("");
+                addressTextField.setText("");
+                postcodeTextField.setText("");
+                cityTextField.setText("");
+                loginTextField.setText("");
+                nameTextField.requestFocus();
 
             }
         });
@@ -145,39 +158,13 @@ public class StaffLibraryTable {
 
 
 
-        public static void main (String[]args){
+        public static void main (String[]args) throws SQLException {
             new StaffLibraryTable();
         }
 
     }
 
-// --------------wyszukiwarka------------------------
 
-//
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//        } else if (e.getSource() == deleteButton)
-//         {
-//            try {
-//                DatabaseConnector databaseConnector = new DatabaseConnector();
-//                PreparedStatement preparedStatement = databaseConnector.connection.prepareStatement("delete from stafflist where id_worker = ?");
-//                preparedStatement.setString(1, String.valueOf(staffTable.getModel().getValueAt(selectedRow, 0)));
-//                preparedStatement.executeUpdate();
-//                tbload();
-//            } catch (SQLException ex) {
-//                throw new RuntimeException(ex);
-//            }
 
 
 

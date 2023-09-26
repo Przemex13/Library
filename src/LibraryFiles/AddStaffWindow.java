@@ -1,6 +1,7 @@
 package LibraryFiles;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -95,24 +96,12 @@ public class AddStaffWindow extends JFrame implements ActionListener {
         cancelButton.addActionListener(this);
 
     }
-    public static boolean loginChecker (String login){
-        boolean result;
-        try {
-            DatabaseConnector databaseConnector = new DatabaseConnector();
-            String sqlQuery = String.format("select * from loggintable where login = '%s'", login);
-            ResultSet resultSet = databaseConnector.statement.executeQuery(sqlQuery);
-            System.out.println(resultSet.next() + "x");
-            result = !resultSet.next();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addButton){
-            String name, surname, address, postcode, city, userType, queryGenerator, login, password;
+            String name, surname, address, postcode, city, userType, queryGenerator1, queryGenerator2, login, password;
             name = nameTextField.getText();
             surname = surnameTextField.getText();
             address = addressTextField1.getText() + " " + addressTextField2.getText();
@@ -122,24 +111,16 @@ public class AddStaffWindow extends JFrame implements ActionListener {
             password = String.valueOf(passwordTextField.getPassword());
             userType = userTypeChoice.getSelectedItem();
 
-            if (loginChecker(login)) {
+            if (DatabaseConnector.loginChecker(login)) {
 
+                queryGenerator1 = String.format("insert into stafflist" +
+                                "(`name`, `surname`, `address`, `postcode`, `city`) VALUES ('%s', '%s', '%s', '%s', '%s')",
+                        name, surname, address, postcode, city);
+                queryGenerator2 = String.format("insert into loggintable" +
+                                "(`login`, `password`, `userType`) VALUES ('%s', '%s', '%s')", login, password, userType);
+                DatabaseConnector databaseConnector1 = new DatabaseConnector(queryGenerator1);
+                DatabaseConnector databaseConnector2 = new DatabaseConnector(queryGenerator2);
 
-
-                try {
-                    queryGenerator = String.format("insert into stafflist" +
-                                    "(`name`, `surname`, `address`, `postcode`, `city`) VALUES ('%s', '%s', '%s', '%s', '%s')",
-                                    name, surname, address, postcode, city);
-                    DatabaseConnector databaseConnector = new DatabaseConnector();
-                    databaseConnector.statement.executeUpdate(queryGenerator);
-                    queryGenerator = String.format("insert into loggintable" +
-                            "(`login`, `password`, `userType`) VALUES ('%s', '%s', '%s')", login, password, userType);
-                    databaseConnector.statement.executeUpdate(queryGenerator);
-
-                    JOptionPane.showMessageDialog(null, "Staff added");
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
-                }
                 this.setVisible(false);
             }
             else{

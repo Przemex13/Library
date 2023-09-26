@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 public class LibraryDesktop extends JFrame implements ActionListener {
     String loggedUser;
 
@@ -84,7 +86,11 @@ public class LibraryDesktop extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == editJMenuItem) {
-            new StaffLibraryTable();
+            try {
+                new StaffLibraryTable();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         else if (e.getSource() == addWorkerJMenuItem) {
             new AddStaffWindow().setVisible(true);
