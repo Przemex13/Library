@@ -60,30 +60,16 @@ public class DatabaseConnector {
             System.out.println(e.getMessage());
         }
     }
-    public static  TableModel generateTableModelStaffTable(){
-        TableModel tableModel1 = null;
-        DatabaseConnector databaseConnector = new DatabaseConnector("select * from stafflist", tableModel1);
-        return tableModel1;
-    }
+
 
 
     public DatabaseConnector(String sqlQuery, JTable table) {
+        this();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(url, uname, password);
-            statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlQuery);
-            int i = 0;
-            while(resultSet.next()) {i++;}
-            System.out.println("DatabaseConnector(String sqlQuery, JTable table) raws : " + i);
-            resultSet.close();
-            statement.close();
-            connection.close();
-
             tableModel = DbUtils.resultSetToTableModel(resultSet);
             table.setModel(tableModel);
-
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println("error in DatabaseConnector(String sqlQuery, JTable table) - first part");
             System.out.println(e.getMessage());
         } finally {

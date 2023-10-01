@@ -4,9 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class LoginWindow extends JFrame implements ActionListener {
 
     JLabel loginLabel, passwordLabel;
@@ -38,10 +35,6 @@ public class LoginWindow extends JFrame implements ActionListener {
         clearButton = new JButton("Clear");
         clearButton.setBounds(170, 210, 70, 25);
         this.add(clearButton);
-//        registerButton = new JButton("Register...");
-//        registerButton.setBounds(250, 210, 110, 25);
-//        this.add(registerButton);
-//        add action listeners
         loginButton.addActionListener(this);
         clearButton.addActionListener(this);
 
@@ -72,11 +65,6 @@ public class LoginWindow extends JFrame implements ActionListener {
             else{
 
             }
-
-
-//        } else if (e.getSource() == registerButton) {
-//            System.out.println("register");
-//            new RegisterWindow().setVisible(true);
         } else if (e.getSource() == clearButton) {
             this.loginTextField.setText("");
             this.passwordField.setText("");
