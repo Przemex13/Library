@@ -49,16 +49,9 @@ public class DatabaseConnector {
     }
     public DatabaseConnector(String sqlQuery, TableModel tableModel) {
         this();
-        try{
-            resultSet = statement.executeQuery(sqlQuery);
-            int i = 0;
-            while(resultSet.next()) i++;
-            System.out.println("DatabaseConnector(String sqlQuery, TableModel tableModel) Rwault Set rows : " + i);
-            this.tableModel = DbUtils.resultSetToTableModel(resultSet);
-        } catch (SQLException e) {
-            System.out.println("error in DatabaseConnector(String sqlQuery, TableModel tableModel)- first part");
-            System.out.println(e.getMessage());
-        }
+        int idWorker = 0;
+        String sqlQuery2 = String.format("select * from stafflist where login = '%s'");
+        DatabaseConnector databaseConnector1 = new DatabaseConnector();
     }
 
 

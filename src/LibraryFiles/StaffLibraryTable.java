@@ -106,6 +106,7 @@ public class StaffLibraryTable {
         staffTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+//                wrzuca dane z tabeli do JFieldów
                 int selectedRow = staffTable.getSelectedRow();
                 TableModel tableModel = staffTable.getModel();
                 idWorkerTextField.setText(String.valueOf(tableModel.getValueAt(selectedRow, 0)) );
@@ -115,11 +116,41 @@ public class StaffLibraryTable {
                 postcodeTextField.setText((String) tableModel.getValueAt(selectedRow, 4));
                 cityTextField.setText((String) tableModel.getValueAt(selectedRow, 5));
                 loginTextField.setText((String) tableModel.getValueAt(selectedRow, 6));;
-                if (tableModel.getValueAt(selectedRow, 7).equals("StaffMember")) {
-                    statusComboBox.setSelectedIndex(0);
-                }else {
-                    statusComboBox.setSelectedIndex(1);
+//
+//
+//              if (tableModel.getValueAt(selectedRow, 7).equals("StaffMember")) {
+//                    statusComboBox.setSelectedIndex(0)
+//                }else {
+//                    statusComboBox.setSelectedIndex(1);
+//                }
+
+//                TableModel tableModel1 = null;
+//                String sqlQuery = String.format("select * from loggintable where id_worker = '%d'", tableModel.getValueAt(selectedRow, 0));
+//                DatabaseConnector databaseConnector1 = new DatabaseConnector(sqlQuery, tableModel1);
+//                System.out.println(tableModel1.getValueAt(1,4));
+//
+                //                          wyciągnie status pracownika z bazy i wrzuci Comboboxa
+                String sqlQuery2 = String.format("select * from loggintable where id_worker = '%s'", tableModel.getValueAt(selectedRow,0));
+                DatabaseConnector databaseConnector1 = new DatabaseConnector();
+                String status = null;
+                try {
+                    Statement statement = databaseConnector1.connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sqlQuery2);
+                    if(resultSet.next()){
+                        status = resultSet.getString(4);
+                        System.out.println(status);
+                    }
+                } catch ( SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }finally {
+                    try {
+                        databaseConnector1.connection.close();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
+                if (status.equals("Admin")) statusComboBox.setSelectedIndex(1);
+
             }
         });
         addButton.addActionListener(new ActionListener() {
@@ -171,10 +202,9 @@ public class StaffLibraryTable {
 //
 //
 //
-
-
-
                         JOptionPane.showMessageDialog(null, "Dodano pracownika");
+                        int i =  JOptionPane.showInternalConfirmDialog(null,"Jakiś tekst");
+                        System.out.println();
                         try {
                             fetchTable();
                         } catch (SQLException ex) {
@@ -221,9 +251,12 @@ public class StaffLibraryTable {
                         "WHERE id_worker = '%d';",
                         name,surname,address, postcode, city, login, number);
                 DatabaseConnector databaseConnector1 = new DatabaseConnector(sqlQuery);
-                String sqlQuery1 = String.format("UPDATE `loggintable` SET " +
-                        "`login`='%s'," +
-                        "WHERE = `login` = '%s'; ", login, login);
+                String sqlQuery1 = String.format("UPDATE `loggintable` SET `login`='%s' WHERE id_worker = '%d'; ", login, Integer.parseInt(idWorkerTextField.getText()));
+                DatabaseConnector databaseConnector2 = new DatabaseConnector(sqlQuery1);
+
+
+
+
                 try {
                     fetchTable();
                 } catch (SQLException ex) {
