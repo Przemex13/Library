@@ -3,6 +3,8 @@ import LibraryFiles.DatabaseConnector;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class NewCopy {
     private JPanel panel1;
@@ -32,6 +34,25 @@ public class NewCopy {
         });
 
 
+        addBookButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+               String newBookNumber = DatabaseConnector.CopyNumberGenerator(titleTextField.getText());
+               String idBook = idBookTextField.getText();
+               String enterData;
+
+               Date nowDate = new Date();
+               long stampTime = nowDate.getTime();
+               SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                enterData = dateFormat.format(nowDate);
+                System.out.println(enterData);
+                System.out.println(enterData);
+                String SQLQuery =  String.format("insert into inventory(`id_copy`, `id_book`,`enter_data`) VALUES ('%s', '%s','%s')", newBookNumber, idBook, enterData);
+               DatabaseConnector databaseConnector = new DatabaseConnector(SQLQuery);
+               JOptionPane.showMessageDialog(null, "dodano książkę o numerze: " + newBookNumber + "\n"+ "tytuł: " + titleTextField.getText());
+                DatabaseConnector.fetchBookTable(idBookTextField.getText(),bookTable);
+            }
+        });
     }
 
     public class TitlesAndAuthors {
@@ -89,6 +110,9 @@ public class NewCopy {
                         idBookTextField.setText(String.valueOf(authorsAndTitels.getValueAt(selectedRow, 0)));
                         authorTextField.setText(String.valueOf(authorsAndTitels.getValueAt(selectedRow, 1)));
                         titleTextField.setText(String.valueOf(authorsAndTitels.getValueAt(selectedRow, 2)));
+                        DatabaseConnector.fetchBookTable(idBookTextField.getText(),bookTable);
+
+
                         frame.dispose();
 //                System.out.println(titlesAndAuthors.authorsAndTitels.getValueAt(titlesAndAuthors.authorsAndTitels.getSelectedRow(),1));
                     }
