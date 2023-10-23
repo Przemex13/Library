@@ -48,11 +48,7 @@ public class DatabaseConnector {
                 System.out.println(e.getMessage());
             }
         }
-
     }
-
-
-
 
     public DatabaseConnector(String sqlQuery, JTable table) {
         this();
@@ -124,11 +120,9 @@ public class DatabaseConnector {
 //        CREATE TABLE `librarytest`.`tabletest` (`id_reader` VARCHAR(10) NOT NULL , `borrow_book_date` DATE NOT NULL , `give_back_date` DATE NOT NULL ) ENGINE = InnoDB;
     String SQLquery = String.format("CREATE TABLE `librarytest`.`%s` (`id_reader` VARCHAR(10) NOT NULL , `borrow_book_date` DATE NOT NULL , `give_back_date` DATE NOT NULL ) ENGINE = InnoDB;",copyNumber);
     TableModel tableModel1 =  resultOfSelectRequest(SQLquery);
-
     }
     public static TableModel resultOfSelectRequest (String sqlQuery){
             TableModel tableModel1 = null;
-
         try {
             DatabaseConnector databaseConnector = new DatabaseConnector();
             ResultSet resultSet1 = databaseConnector.statement.executeQuery(sqlQuery);
@@ -139,8 +133,6 @@ public class DatabaseConnector {
 
             throw new RuntimeException(e);
         }
-
-
         return tableModel1;
     }
 
@@ -188,9 +180,7 @@ public class DatabaseConnector {
         TableModel tableModel1 = resultOfSelectRequest(SQLQuery);
         System.out.println("book account in this year " + tableModel1.getRowCount());
         CopyNumber += tableModel1.getRowCount() + 1;
-
         return CopyNumber;
-
     }
 
     public static String numerFiller(String liczba, int iloscZnakow){
@@ -199,7 +189,6 @@ public class DatabaseConnector {
 
         for (int i = 0 ; i < zerosAmount; i ++){
             figure += "0";
-
         }
         figure += liczba;
         return figure;
@@ -230,7 +219,4 @@ public class DatabaseConnector {
             }
         }
     }
-
-
-
 }

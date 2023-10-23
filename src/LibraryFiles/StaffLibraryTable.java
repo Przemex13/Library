@@ -17,15 +17,21 @@ import java.sql.*;
 import java.util.Vector;
 
 public class StaffLibraryTable {
-    private JPanel mainPanel, leftBottomPanel, rightPanel, leftPanel;
+    private JPanel mainPanel, rightPanel;
     private JTable staffTable;
     private JTextField idWorkerTextField, nameTextField, surnameTextField, addressTextField, postcodeTextField, cityTextField, searchTextField, loginTextField;
-    private JButton addButton, updateButton, deleteButton, clearButton;
+    private JButton addButton, updateButton, clearButton;
     private JPasswordField passwordTextField;
 
     private JScrollPane scrolPane;
     private JComboBox statusComboBox;
-    private JLabel searchLabel,loginLabel, passwordLabel;
+    private JLabel searchLabel;
+    private JPanel leftPanel;
+    private JPanel leftBottomPanel;
+    private JButton deleteButton;
+
+    private JLabel loginLabel;
+    private JLabel passwordLabel;
 
     public void fetchTable() throws SQLException {
         try {
@@ -55,25 +61,7 @@ public class StaffLibraryTable {
             throw new RuntimeException(e);
         }
     }
-    public DefaultTableModel fetchTable(JTable tabela, String kwerenda){
-       DefaultTableModel defaultTableModel = null;
-       try {
-           Class.forName("com.mysql.cj.jdbc.Driver");
-           Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarytest","root", "");
-           String str = kwerenda;
-           Statement statement = connection.createStatement();
-           PreparedStatement preparedStatement = connection.prepareStatement(str,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-           ResultSet resultSet = preparedStatement.executeQuery();
-           tabela.setModel(DbUtils.resultSetToTableModel(resultSet));
-           resultSet.close();
-           statement.close();
-           connection.close();
-       } catch (Exception e) {
-           e.getMessage();
-           e.printStackTrace();
-       }
-       return defaultTableModel;
-   }
+
     public StaffLibraryTable() throws SQLException {
         JFrame frame = new JFrame("Staff");
         frame.setContentPane(mainPanel);
@@ -275,6 +263,43 @@ public class StaffLibraryTable {
                 cityTextField.setText("");
                 loginTextField.setText("");
                 nameTextField.requestFocus();
+            }
+        });
+        deleteButton.addMouseListener(new MouseAdapter() {
+
+
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                String [] yesNoArray = {"Yes, delete please", "No"};
+                int deleteConfirm = JOptionPane.showOptionDialog(null, "Are you sure You want to delete?",
+                        "Warning",JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, yesNoArray , null);
+
+                if (deleteConfirm == 0) {
+                    String idWorker = idWorkerTextField.getText();
+                    String SQLquery = String.format("DELETE From stafflist WHERE id_worker = '%s';", idWorker);
+                    DatabaseConnector databaseConnector = new DatabaseConnector(SQLquery);
+                    try {
+                        fetchTable();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    idWorkerTextField.setText("");
+                    nameTextField.setText("");
+                    surnameTextField.setText("");
+                    addressTextField.setText("");
+                    postcodeTextField.setText("");
+                    cityTextField.setText("");
+                    loginTextField.setText("");
+                    nameTextField.requestFocus();
+                }
+
+                try {
+                    fetchTable();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }

@@ -1,12 +1,14 @@
 import LibraryFiles.DatabaseConnector;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class NewCopy {
+public class NewCopy implements ActionListener {
     private JPanel panel1;
     private JTextField authorTextField;
     private JTextField titleTextField;
@@ -14,9 +16,6 @@ public class NewCopy {
     private JTable bookTable;
     private JButton addBookButton;
     private JTextField idBookTextField;
-    static int selectRow;
-
-
     public NewCopy() {
         JFrame frame = new JFrame("New copy");
         frame.setContentPane(panel1);
@@ -33,7 +32,6 @@ public class NewCopy {
 
         });
 
-
         addBookButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -44,15 +42,22 @@ public class NewCopy {
                Date nowDate = new Date();
                long stampTime = nowDate.getTime();
                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                enterData = dateFormat.format(nowDate);
-                System.out.println(enterData);
-                System.out.println(enterData);
-                String SQLQuery =  String.format("insert into inventory(`id_copy`, `id_book`,`enter_data`) VALUES ('%s', '%s','%s')", newBookNumber, idBook, enterData);
+               enterData = dateFormat.format(nowDate);
+               System.out.println(enterData);
+               System.out.println(enterData);
+               String SQLQuery =  String.format("insert into inventory(`id_copy`, `id_book`,`enter_data`) VALUES ('%s', '%s','%s')", newBookNumber, idBook, enterData);
                DatabaseConnector databaseConnector = new DatabaseConnector(SQLQuery);
                JOptionPane.showMessageDialog(null, "dodano książkę o numerze: " + newBookNumber + "\n"+ "tytuł: " + titleTextField.getText());
-                DatabaseConnector.fetchBookTable(idBookTextField.getText(),bookTable);
+               DatabaseConnector.fetchBookTable(idBookTextField.getText(),bookTable);
+               String SQLQuery1 = String.format("CREATE TABLE `librarytest`.`%s` (`id_reader` VARCHAR(10) NOT NULL , `borrow_book_date` DATE NOT NULL , `give_back_date` DATE NOT NULL ) ENGINE = InnoDB;",newBookNumber);
+               DatabaseConnector databaseConnector1 = new DatabaseConnector(SQLQuery1);
             }
         });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 
     public class TitlesAndAuthors {
