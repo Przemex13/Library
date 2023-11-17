@@ -35,8 +35,11 @@ public class DatabaseConnector {
             this.preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("error in DatabaseConnector(String sqlQuery)-first part");
+            System.out.println(e.getSQLState());
             System.out.println(e.getMessage());
             System.out.println(e.getErrorCode());
+            System.out.println(e.getCause());
+            System.out.println(e.getLocalizedMessage());
         } finally {
             try {
                 if (this.connection != null) {
@@ -153,7 +156,7 @@ public class DatabaseConnector {
             databaseConnector.connection.createStatement();
             ResultSet resultSet = databaseConnector.statement.executeQuery(sqlQuery);
             if(resultSet.next()){
-                idBook  = resultSet.getString("idBook");
+                idBook  = resultSet.getString("id_book");
                 resultSet.close();
                 databaseConnector.connection.close();
             }else{
@@ -194,7 +197,33 @@ public class DatabaseConnector {
         return figure;
     }
     public static void fetchBookTable(String id_book, JTable table) {
-        String sqlQuery = String.format("SELECT * FROM inventory WHERE inventory.id_book = %s;",id_book);
+        String sqlQuery = String.format("SELECT inventory.id_copy, inventory.enter_data FROM inventory WHERE inventory.id_book = %s;",id_book);
+        DatabaseConnector databaseConnector = new DatabaseConnector();
+
+        ResultSet resultSet = null;
+        TableModel tableModel;
+        try{
+            Statement statement = databaseConnector.connection.createStatement();
+            resultSet = statement.executeQuery(sqlQuery);
+            tableModel = DbUtils.resultSetToTableModel(resultSet);
+            table.setModel(tableModel);
+        } catch (SQLException e) {
+            System.out.println("error in DatabaseConnector(String sqlQuery, JTable table) - first part");
+            System.out.println(e.getMessage());
+        } finally {
+            if (databaseConnector != null) {
+                try {
+                    resultSet.close();
+                    databaseConnector.connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }
+    }
+    public static void fetchInventory( JTable table) {
+        String sqlQuery = "SELECT * FROM inventory;";
         DatabaseConnector databaseConnector = new DatabaseConnector();
 
         ResultSet resultSet = null;

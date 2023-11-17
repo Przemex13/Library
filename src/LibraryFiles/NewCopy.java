@@ -1,4 +1,4 @@
-import LibraryFiles.DatabaseConnector;
+package LibraryFiles;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -45,7 +45,7 @@ public class NewCopy implements ActionListener {
                enterData = dateFormat.format(nowDate);
                System.out.println(enterData);
                System.out.println(enterData);
-               String SQLQuery =  String.format("insert into inventory(`id_copy`, `id_book`,`enter_data`) VALUES ('%s', '%s','%s')", newBookNumber, idBook, enterData);
+               String SQLQuery =  String.format("insert into inventory(`id_copy`, `id_book`,`enter_data`,`withdraw_data`) VALUES ('%s', '%s','%s', NULL)", newBookNumber, idBook, enterData);
                DatabaseConnector databaseConnector = new DatabaseConnector(SQLQuery);
                JOptionPane.showMessageDialog(null, "dodano książkę o numerze: " + newBookNumber + "\n"+ "tytuł: " + titleTextField.getText());
                DatabaseConnector.fetchBookTable(idBookTextField.getText(),bookTable);

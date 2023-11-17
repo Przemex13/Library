@@ -71,10 +71,12 @@ public class LibraryDesktop extends JFrame implements ActionListener {
         inventoryJMenu.add(withdrawBookJMenuItem);
         addBookJMenuItem.addActionListener(this);
         withdrawBookJMenuItem.addActionListener(this);
+
         bookDatabaseJMenu = new JMenu("Book database");
         bookDatabaseJMenuItem = new JMenuItem("Book Database");
         bookDatabaseJMenu.add(bookDatabaseJMenuItem);
         bookDatabaseJMenu.addActionListener(this);
+        bookDatabaseJMenuItem.addActionListener(this);
 
         settingsJMenu = new JMenu("Settings");
         yourProfileJMenuItem = new JMenuItem("Your Profile");
@@ -132,10 +134,16 @@ public class LibraryDesktop extends JFrame implements ActionListener {
         }
         else if (e.getSource() == addBookJMenuItem) {
             System.out.println("dodano książke");
+            new NewCopy();
 
         }
-        else if (e.getSource() == withdrawBookJMenuItem) {}
-        else if (e.getSource() == bookDatabaseJMenuItem) {}
+        else if (e.getSource() == withdrawBookJMenuItem) {
+            new WithdrawBook();
+        }
+        else if (e.getSource() == bookDatabaseJMenuItem) {
+            new BookDatabase();
+            System.out.println("new book database");
+        }
         else if (e.getSource() == yourProfileJMenuItem) {}
         else if (e.getSource() == maxRentJMenuItem) {}
         else if (e.getSource() == feeForOverKeepingJMenuItem) {}
