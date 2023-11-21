@@ -16,6 +16,7 @@ public class NewCopy implements ActionListener {
     private JTable bookTable;
     private JButton addBookButton;
     private JTextField idBookTextField;
+
     public NewCopy() {
         JFrame frame = new JFrame("New copy");
         frame.setContentPane(panel1);
@@ -49,7 +50,7 @@ public class NewCopy implements ActionListener {
                DatabaseConnector databaseConnector = new DatabaseConnector(SQLQuery);
                JOptionPane.showMessageDialog(null, "dodano książkę o numerze: " + newBookNumber + "\n"+ "tytuł: " + titleTextField.getText());
                DatabaseConnector.fetchBookTable(idBookTextField.getText(),bookTable);
-               String SQLQuery1 = String.format("CREATE TABLE `librarytest`.`%s` (`id_reader` VARCHAR(10) NOT NULL , `borrow_book_date` DATE NOT NULL , `give_back_date` DATE NOT NULL ) ENGINE = InnoDB;",newBookNumber);
+               String SQLQuery1 = String.format("CREATE TABLE `librarytest`.`%s` (`id_reader` VARCHAR(50) NOT NULL , `borrow_book_date` DATE NULL , `give_back_date` DATE NULL ) ENGINE = InnoDB;",newBookNumber);
                DatabaseConnector databaseConnector1 = new DatabaseConnector(SQLQuery1);
             }
         });

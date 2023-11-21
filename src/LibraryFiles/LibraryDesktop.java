@@ -123,8 +123,12 @@ public class LibraryDesktop extends JFrame implements ActionListener {
             }
 
         }
-        else if (e.getSource() == borrowBookJMenuItem) {}
-        else if (e.getSource() == giveBackBookJMenuItem) {}
+        else if (e.getSource() == borrowBookJMenuItem) {
+            new BorrowBook();
+        }
+        else if (e.getSource() == giveBackBookJMenuItem) {
+            new ReturnBook();
+        }
         else if (e.getSource() == addReadersJMenuItem) {
             System.out.println("add readers");
 

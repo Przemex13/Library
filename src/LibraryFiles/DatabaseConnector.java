@@ -163,7 +163,7 @@ public class DatabaseConnector {
                 System.out.println("cos poszlo nie tak");
             }
             CopyNumber += numerFiller(idBook,4);
-            CopyNumber +="-";
+            CopyNumber +="_";
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -174,7 +174,7 @@ public class DatabaseConnector {
 //        dodanie daty do numeru
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         CopyNumber += dateFormat.format(nowDate);
-        CopyNumber +="-";
+        CopyNumber +="_";
 
 //      dodanie kolejnego numeru ksiązki w roku
         SimpleDateFormat dateFormatYear = new SimpleDateFormat("yyyy");
