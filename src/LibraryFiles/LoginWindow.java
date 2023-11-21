@@ -4,15 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class LoginWindow extends JFrame implements ActionListener {
 
     JLabel loginLabel, passwordLabel;
     JTextField loginTextField;
     JPasswordField passwordField;
-    JButton loginButton, clearButton, registerButton;
+    JButton loginButton, clearButton;
 
 
     public LoginWindow() {
@@ -38,22 +35,19 @@ public class LoginWindow extends JFrame implements ActionListener {
         clearButton = new JButton("Clear");
         clearButton.setBounds(170, 210, 70, 25);
         this.add(clearButton);
-        registerButton = new JButton("Register...");
-        registerButton.setBounds(250, 210, 110, 25);
-        this.add(registerButton);
-//        add action listeners
         loginButton.addActionListener(this);
         clearButton.addActionListener(this);
-        registerButton.addActionListener(this);
 
 
         Dimension rozdzielnosc = Toolkit.getDefaultToolkit().getScreenSize();
         int widthScreen = (int) rozdzielnosc.getWidth();
         int highScreen = (int) rozdzielnosc.getHeight();
+        int widthWindow = 400;
+        int hightWindow = 310;
 
         this.setLayout(new BorderLayout());
-        this.setSize(400, 310);
-        this.setLocation(widthScreen / 2 - 200, highScreen / 2 - 155);
+        this.setSize(widthWindow, hightWindow);
+        this.setLocation(widthScreen / 2 - widthWindow / 2, highScreen / 2 - hightWindow / 2);
         this.setVisible(true);
     }
 
@@ -65,34 +59,12 @@ public class LoginWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton){
 
-            DatabaseConnector databaseConnector = new DatabaseConnector();
-            String login = loginTextField.getText();
-            String password = String.valueOf(passwordField.getPassword());
-            String queryGenerator =
-                    "select * from loggins where login = '" + login + "' and password = '" + password + "';";
-            System.out.println(queryGenerator);
-            try {
-                ResultSet resultSet = databaseConnector.statement.executeQuery(queryGenerator);
-//                checking email and password
-                if (resultSet.next()){
-                    String loginLogged = resultSet.getString("login");
-                    System.out.println(loginLogged);
-                    new LibraryDesktop(loginLogged).setVisible(true);
-                    this.setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(null, "Zły login lub hasło ty tępy chuju");
-
-                }
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+            if (DatabaseConnector.logginService(loginTextField.getText(), passwordField.getText())){
+                new LibraryDesktop(loginTextField.getText()).setVisible(true);
+            }
+            else{
 
             }
-
-
-
-        } else if (e.getSource() == registerButton) {
-            System.out.println("register");
-            new RegisterWindow().setVisible(true);
         } else if (e.getSource() == clearButton) {
             this.loginTextField.setText("");
             this.passwordField.setText("");
