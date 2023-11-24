@@ -132,7 +132,7 @@ public class DatabaseConnector {
         String sqlQuery;
         String idBook = "";
         try {
-//            dodanie numeru książki
+//            add book copy number
             sqlQuery = String.format("select * from booktable where title ='%s';",book);
             DatabaseConnector databaseConnector = new DatabaseConnector();
             databaseConnector.connection.createStatement();
