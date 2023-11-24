@@ -8,7 +8,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -69,12 +68,6 @@ public class WithdrawBook {
 
                 DatabaseConnector databaseConnector5 = new DatabaseConnector(String.format("delete from inventory where id_copy = '%s' ", idCopyOfDeletedBook));
                 fetchBooktable();
-//                DatabaseConnector databaseConnector6 = new DatabaseConnector("Select inventory.id_copy, " +
-//                        "booktable.title, " +
-//                        "booktable.author, " +
-//                        "inventory.enter_data " +
-//                        "FROM inventory INNER JOIN booktable ON inventory.id_book = booktable.id_book;", tableBook);
-//                DatabaseConnector databaseConnector2 = new DatabaseConnector("select * from inventory", tableBook);
             }
         });
         tableBook.addMouseListener(new MouseAdapter() {
@@ -90,13 +83,9 @@ public class WithdrawBook {
                 idCopyOfDeletedBook = (String) tableBookTableModel.getValueAt(selectedRow, 0);
                 System.out.println(idCopyOfDeletedBook);
                 System.out.println(tableBook.getSelectedRow());
-
             }
         });
-
-
     }
-
     void fetchBooktable() {
 
         try {
@@ -106,7 +95,6 @@ public class WithdrawBook {
                     "booktable.author, " +
                     "inventory.enter_data " +
                     "FROM inventory INNER JOIN booktable ON inventory.id_book = booktable.id_book;";
-
             databaseConnector.preparedStatement = databaseConnector.connection.prepareStatement(str, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet resultSet = databaseConnector.preparedStatement.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -120,7 +108,6 @@ public class WithdrawBook {
                     vectorRow.add(resultSet.getString("title"));
                     vectorRow.add(resultSet.getString("author"));
                     vectorRow.add(resultSet.getString("enter_data"));
-
                 }
                 defaultTableModel.addRow(vectorRow);
             }

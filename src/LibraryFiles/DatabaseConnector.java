@@ -24,8 +24,7 @@ public class DatabaseConnector {
             this.connection = DriverManager.getConnection(url, uname, password);
             this.statement = connection.createStatement();
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("error in DatabaseConnector()- first part");
-            System.out.println(e.getMessage());
+            e.getMessage();
         }
     }
     public DatabaseConnector(String sqlQuery) {
@@ -34,7 +33,6 @@ public class DatabaseConnector {
             this.preparedStatement = connection.prepareStatement(sqlQuery);
             this.preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("error in DatabaseConnector(String sqlQuery)-first part");
             System.out.println(e.getSQLState());
             System.out.println(e.getMessage());
             System.out.println(e.getErrorCode());
@@ -47,7 +45,6 @@ public class DatabaseConnector {
                     this.statement.close();
                 }
             } catch (SQLException e) {
-                System.out.println("error in DatabaseConnector(String sqlQuery)- second part");
                 System.out.println(e.getMessage());
             }
         }
@@ -60,7 +57,6 @@ public class DatabaseConnector {
             tableModel = DbUtils.resultSetToTableModel(resultSet);
             table.setModel(tableModel);
         } catch (SQLException e) {
-            System.out.println("error in DatabaseConnector(String sqlQuery, JTable table) - first part");
             System.out.println(e.getMessage());
         } finally {
             try {
@@ -70,7 +66,6 @@ public class DatabaseConnector {
                     statement.close();
                 }
             } catch (SQLException e) {
-                System.out.println("error in DatabaseConnector(String sqlQuery, JTable table) - second part");
                 System.out.println(e.getMessage());
             }
         }
@@ -83,7 +78,6 @@ public class DatabaseConnector {
             databaseConnector.resultSet = databaseConnector.statement.executeQuery(sqlQuery);
             if(databaseConnector.resultSet.next()) wynik = false;
         } catch (SQLException e) {
-            System.out.println("error in LoginChecker");
             System.out.println(e.getMessage());
         }
         return wynik;
@@ -98,7 +92,7 @@ public class DatabaseConnector {
                 isValidPassword = true;
             }
             else{
-                JOptionPane.showMessageDialog(null, "Zły login lub hasło");
+                JOptionPane.showMessageDialog(null, "invalid credentials");
                 isValidPassword = false;
             }
         } catch (SQLException e) {
@@ -112,17 +106,10 @@ public class DatabaseConnector {
                     databaseConnector.statement.close();
                 }
             } catch (SQLException e) {
-                System.out.println("error in DatabaseConnector(String sqlQuery, JTable table) - second part");
                 System.out.println(e.getMessage());
             }
         }
         return isValidPassword;
-    }
-
-    public static void createNewCopyTable(String copyNumber){
-//        CREATE TABLE `librarytest`.`tabletest` (`id_reader` VARCHAR(10) NOT NULL , `borrow_book_date` DATE NOT NULL , `give_back_date` DATE NOT NULL ) ENGINE = InnoDB;
-    String SQLquery = String.format("CREATE TABLE `librarytest`.`%s` (`id_reader` VARCHAR(10) NOT NULL , `borrow_book_date` DATE NOT NULL , `give_back_date` DATE NOT NULL ) ENGINE = InnoDB;",copyNumber);
-    TableModel tableModel1 =  resultOfSelectRequest(SQLquery);
     }
     public static TableModel resultOfSelectRequest (String sqlQuery){
             TableModel tableModel1 = null;
@@ -138,11 +125,6 @@ public class DatabaseConnector {
         }
         return tableModel1;
     }
-
-//    Zrobmy że numer będzie wygladał tak
-//    0000 - ksiażka
-//    rrrrmmdd- data przyjęcia książki
-//    000 - kolejny numer ksiązki w roku
 
     public static String CopyNumberGenerator(String book){
         String date;
@@ -160,7 +142,7 @@ public class DatabaseConnector {
                 resultSet.close();
                 databaseConnector.connection.close();
             }else{
-                System.out.println("cos poszlo nie tak");
+                System.out.println("something went wrong");
             }
             CopyNumber += numerFiller(idBook,4);
             CopyNumber +="_";
@@ -169,14 +151,13 @@ public class DatabaseConnector {
         }
 
         Date nowDate = new Date();
-        long stampTime = nowDate.getTime();
 
-//        dodanie daty do numeru
+//       adding data to book number
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         CopyNumber += dateFormat.format(nowDate);
         CopyNumber +="_";
 
-//      dodanie kolejnego numeru ksiązki w roku
+//      adding control number to copy number
         SimpleDateFormat dateFormatYear = new SimpleDateFormat("yyyy");
         String rok  = dateFormatYear.format(nowDate);
         String SQLQuery = String.format("SELECT * FROM inventory WHERE inventory.enter_data > '%s-01-01' AND inventory.enter_data < '%s-12-31' AND inventory.id_book = %s;", rok, rok, idBook);
@@ -186,14 +167,13 @@ public class DatabaseConnector {
         return CopyNumber;
     }
 
-    public static String numerFiller(String liczba, int iloscZnakow){
+    public static String numerFiller(String value, int iloscZnakow){
         String figure = "";
-        int zerosAmount = iloscZnakow - liczba.length();
-
+        int zerosAmount = iloscZnakow - value.length();
         for (int i = 0 ; i < zerosAmount; i ++){
             figure += "0";
         }
-        figure += liczba;
+        figure += value;
         return figure;
     }
     public static void fetchBookTable(String id_book, JTable table) {
@@ -208,33 +188,6 @@ public class DatabaseConnector {
             tableModel = DbUtils.resultSetToTableModel(resultSet);
             table.setModel(tableModel);
         } catch (SQLException e) {
-            System.out.println("error in DatabaseConnector(String sqlQuery, JTable table) - first part");
-            System.out.println(e.getMessage());
-        } finally {
-            if (databaseConnector != null) {
-                try {
-                    resultSet.close();
-                    databaseConnector.connection.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
-        }
-    }
-    public static void fetchInventory( JTable table) {
-        String sqlQuery = "SELECT * FROM inventory;";
-        DatabaseConnector databaseConnector = new DatabaseConnector();
-
-        ResultSet resultSet = null;
-        TableModel tableModel;
-        try{
-            Statement statement = databaseConnector.connection.createStatement();
-            resultSet = statement.executeQuery(sqlQuery);
-            tableModel = DbUtils.resultSetToTableModel(resultSet);
-            table.setModel(tableModel);
-        } catch (SQLException e) {
-            System.out.println("error in DatabaseConnector(String sqlQuery, JTable table) - first part");
             System.out.println(e.getMessage());
         } finally {
             if (databaseConnector != null) {
