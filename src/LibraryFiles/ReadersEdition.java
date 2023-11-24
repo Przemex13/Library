@@ -136,7 +136,6 @@ public class ReadersEdition {
                 String city = cityTextField.getText();
                 String idReader = surname + "_" + name + "_" + pesel;
 
-
 //                           adding record to stafflist table
                 String sqlQuery3 = "insert into readerslist (`idReader`,`name`, `surname`,`Pesel`, `address`, `postcode`, `city`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
                 String sqlQuery3Formatted = String.format(sqlQuery3, idReader, name, surname, pesel, address, postcode, city);

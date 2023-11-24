@@ -69,12 +69,6 @@ public class NewCopy implements ActionListener {
             private JButton chooseButton;
             int selectedRow;
 
-//            public static boolean ifAuthorTitleDataIsCorrect(String author, String title) {
-//                boolean isCorrect = true;
-//                DatabaseConnector databaseConnector = new DatabaseConnector();
-//                return isCorrect;
-//            }
-
             public JTable getAuthorsAndTitels() {
                 return authorsAndTitels;
             }
@@ -89,7 +83,6 @@ public class NewCopy implements ActionListener {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         CustomDialog customDialog = new CustomDialog();
-
                         int result = JOptionPane.showConfirmDialog(null, customDialog.contentPane, "", JOptionPane.OK_CANCEL_OPTION);
                         System.out.println(result);
                         if (result == JOptionPane.OK_OPTION) {
@@ -120,7 +113,6 @@ public class NewCopy implements ActionListener {
                 });
             }
         }
-
         public static void main(String[] args) {
             new NewCopy();
         }

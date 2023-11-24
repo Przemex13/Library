@@ -162,7 +162,6 @@ public class DatabaseConnector {
         String rok  = dateFormatYear.format(nowDate);
         String SQLQuery = String.format("SELECT * FROM inventory WHERE inventory.enter_data > '%s-01-01' AND inventory.enter_data < '%s-12-31' AND inventory.id_book = %s;", rok, rok, idBook);
         TableModel tableModel1 = resultOfSelectRequest(SQLQuery);
-        System.out.println("book account in this year " + tableModel1.getRowCount());
         CopyNumber += tableModel1.getRowCount() + 1;
         return CopyNumber;
     }
@@ -179,7 +178,6 @@ public class DatabaseConnector {
     public static void fetchBookTable(String id_book, JTable table) {
         String sqlQuery = String.format("SELECT inventory.id_copy, inventory.enter_data FROM inventory WHERE inventory.id_book = %s;",id_book);
         DatabaseConnector databaseConnector = new DatabaseConnector();
-
         ResultSet resultSet = null;
         TableModel tableModel;
         try{
@@ -197,7 +195,6 @@ public class DatabaseConnector {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-
             }
         }
     }
