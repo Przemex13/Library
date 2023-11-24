@@ -22,17 +22,14 @@ public class StaffLibraryTable {
     private JTextField idWorkerTextField, nameTextField, surnameTextField, addressTextField, postcodeTextField, cityTextField, searchTextField, loginTextField;
     private JButton addButton, updateButton, clearButton;
     private JPasswordField passwordTextField;
-
-    private JScrollPane scrolPane;
+    private JScrollPane scrollPane;
     private JComboBox statusComboBox;
     private JLabel searchLabel;
     private JPanel leftPanel;
     private JPanel leftBottomPanel;
     private JButton deleteButton;
-
     private JLabel loginLabel;
     private JLabel passwordLabel;
-
     public void fetchTable() throws SQLException {
         try {
            DatabaseConnector databaseConnector = new DatabaseConnector();
@@ -117,7 +114,7 @@ public class StaffLibraryTable {
 //                DatabaseConnector databaseConnector1 = new DatabaseConnector(sqlQuery, tableModel1);
 //                System.out.println(tableModel1.getValueAt(1,4));
 //
-                //                          wyciągnie status pracownika z bazy i wrzuci Comboboxa
+                //                          geting worker status and fetching to combobox
                 String sqlQuery2 = String.format("select * from loggintable where id_worker = '%s'", tableModel.getValueAt(selectedRow,0));
                 DatabaseConnector databaseConnector1 = new DatabaseConnector();
                 String status = null;
@@ -155,12 +152,12 @@ public class StaffLibraryTable {
                         String password = passwordTextField.getText();
                         String status = statusComboBox.getSelectedItem().toString();
 
-//                           wpisuje reokord do stafflist
+//                           adding reokord do stafflist
                         String sqlQuery3 = "insert into stafflist (`name`, `surname`, `address`, `postcode`, `city`,`login`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')";
                         String sqlQuery3Formatted = String.format(sqlQuery3,name, surname, address, postcode, city, login);
                         DatabaseConnector databaseConnector = new DatabaseConnector(sqlQuery3Formatted);
 
-//                          wyciągnie id_worker ostatniego rekordu
+//                          fetching id_worker of last record
                         int idWorker = 0;
                         String sqlQuery2 = String.format("select * from stafflist where login = '%s'", login);
                         DatabaseConnector databaseConnector1 = new DatabaseConnector();
@@ -180,26 +177,18 @@ public class StaffLibraryTable {
                                 throw new RuntimeException(ex);
                             }
                         }
-
-//                        wpisze do login i hasło do tabeli po odpowiednim ID
+//                       add record with login and password to logingtable
                         String sqlQuery = "insert into loggintable (`id_worker`, `login`, `password`, `userType`) VALUES ('%s', '%s', '%s', '%s')";
                         String sqlQueryFormatted = String.format(sqlQuery,idWorker, login, password, status);
                         DatabaseConnector databaseConnector2 = new DatabaseConnector(sqlQueryFormatted);
-
-
-//
-//
-//
                         JOptionPane.showMessageDialog(null, "Dodano pracownika");
-                        int i =  JOptionPane.showInternalConfirmDialog(null,"Jakiś tekst");
+//                        int i =  JOptionPane.showInternalConfirmDialog(null,"Jakiś tekst");
                         System.out.println();
                         try {
                             fetchTable();
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);
                         }
-
-
                         idWorkerTextField.setText("");
                         nameTextField.setText("");
                         surnameTextField.setText("");
@@ -209,10 +198,10 @@ public class StaffLibraryTable {
                         loginTextField.setText("");
                         nameTextField.requestFocus();
                     } else {
-                        JOptionPane.showMessageDialog(null, "Wciśnij przycisk Clear żeby przygotować miejsce na nowy wpis");
+                        JOptionPane.showMessageDialog(null, " Press Clear to prepare space for new record");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Podany login jest już zajęty");
+                    JOptionPane.showMessageDialog(null, "This login is not available any more");
                 }
             }
         });
@@ -241,10 +230,6 @@ public class StaffLibraryTable {
                 DatabaseConnector databaseConnector1 = new DatabaseConnector(sqlQuery);
                 String sqlQuery1 = String.format("UPDATE `loggintable` SET `login`='%s' WHERE id_worker = '%d'; ", login, Integer.parseInt(idWorkerTextField.getText()));
                 DatabaseConnector databaseConnector2 = new DatabaseConnector(sqlQuery1);
-
-
-
-
                 try {
                     fetchTable();
                 } catch (SQLException ex) {

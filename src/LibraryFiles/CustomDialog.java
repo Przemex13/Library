@@ -14,13 +14,9 @@ public class CustomDialog extends JFrame {
     private JLabel authorLabel;
     private JLabel titleLabel;
 
-    public CustomDialog() {
-        System.out.println("default constructor");
-    }
+    public CustomDialog() {}
 
     public CustomDialog(Frame frame) {
-
-        System.out.println("public Dialog(Frame frame) invoked");
         JDialog dialog = new JDialog(frame);
         dialog.setTitle("Tytuł");
         dialog.setContentPane(contentPane);
@@ -41,7 +37,7 @@ public class CustomDialog extends JFrame {
             }
         });
 
-        // call onCancel() when cross is clicked
+//         call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -49,7 +45,7 @@ public class CustomDialog extends JFrame {
             }
         });
 
-        // call onCancel() on ESCAPE
+//         call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -58,12 +54,10 @@ public class CustomDialog extends JFrame {
     }
 
     private void onOK() {
-        // add your code here
         dispose();
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 

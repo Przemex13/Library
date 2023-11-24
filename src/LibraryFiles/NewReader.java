@@ -17,7 +17,7 @@ public class NewReader implements ActionListener {
     private JLabel cityLabel;
     private JLabel postcodeLabel;
     private JTextField peselTextField;
-    private JPanel peselLabelPanel;
+//    private JPanel peselLabelPanel;
     private JLabel peselLabel;
 
     public NewReader() {
@@ -27,7 +27,6 @@ public class NewReader implements ActionListener {
        frame.setVisible(true);
        addReaderButton.addActionListener(this);
        addReaderAnWithdrawButton.addActionListener(this);
-
     }
 
     public static void main(String[] args) {
@@ -43,14 +42,12 @@ public class NewReader implements ActionListener {
         String postcode = postcodeTextField.getText();
         String city = cityTextField.getText();
         String idReader = surname + "_" + name + "_" + pesel;
-
         String SQLQuery = String.format("insert into readerslist(`idReader`, `name`, `surname`, `Pesel`, `address`, `postcode`, `city`) VALUES ('%s', '%s', '%s', '%s', '%s','%s', '%s')",
         idReader, name, surname, pesel, address, postcode, city);
         DatabaseConnector databaseConnector = new DatabaseConnector(SQLQuery);
         String SQLQuery1 = String.format("CREATE TABLE `librarytest`.`%s` (`id_reader` VARCHAR(20) NOT NULL , `borrow_book_date` DATE NOT NULL , `give_back_date` DATE NOT NULL ) ENGINE = InnoDB;", idReader);
         DatabaseConnector databaseConnector1 = new DatabaseConnector(SQLQuery1);
         JOptionPane.showMessageDialog(null, "Readers added");
-
         nameReaderTextFields.setText("");
         surnameTextField.setText("");
         peselTextField.setText("");
@@ -58,13 +55,5 @@ public class NewReader implements ActionListener {
         addressReadeTextField2.setText("");
         postcodeTextField.setText("");
         cityTextField.setText("");
-
-
-        if(e.getSource() == addReaderButton){
-            System.out.println("addReaderButton");
-        }else {
-            System.out.println("addReaderAnWithdrawButton");
-        }
-
     }
 }

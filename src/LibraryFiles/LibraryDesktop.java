@@ -9,13 +9,12 @@ import java.sql.SQLException;
 public class LibraryDesktop extends JFrame implements ActionListener {
     String loggedUser;
 
-    JMenu staffJMenu, readersJMenu, libraryJMenu, inventoryJMenu, bookDatabaseJMenu, settingsJMenu;
+    JMenu staffJMenu, readersJMenu, libraryJMenu, inventoryJMenu, bookDatabaseJMenu;
     JMenuItem editJMenuItem, addWorkerJMenuItem,
             borrowBookJMenuItem, giveBackBookJMenuItem,
             addReadersJMenuItem, showAndEditReadersJMenuItem,
             addBookJMenuItem, withdrawBookJMenuItem,
-            bookDatabaseJMenuItem,
-            yourProfileJMenuItem, maxRentJMenuItem, feeForOverKeepingJMenuItem;
+            bookDatabaseJMenuItem;
 
 
     public LibraryDesktop(String loggedUser) {
@@ -45,7 +44,6 @@ public class LibraryDesktop extends JFrame implements ActionListener {
         staffJMenu.add(editJMenuItem);
         addWorkerJMenuItem.addActionListener(this);
         editJMenuItem.addActionListener(this);
-
         libraryJMenu = new JMenu("Library");
         borrowBookJMenuItem = new JMenuItem("Borrow book");
         giveBackBookJMenuItem = new JMenuItem("Return book");
@@ -54,7 +52,6 @@ public class LibraryDesktop extends JFrame implements ActionListener {
         libraryJMenu.add(giveBackBookJMenuItem);
         borrowBookJMenuItem.addActionListener(this);
         giveBackBookJMenuItem.addActionListener(this);
-
         readersJMenu = new JMenu("Readers");
         addReadersJMenuItem = new JMenuItem("Add Readers");
         showAndEditReadersJMenuItem = new JMenuItem("Show and edit Readers");
@@ -62,8 +59,6 @@ public class LibraryDesktop extends JFrame implements ActionListener {
         readersJMenu.add(showAndEditReadersJMenuItem);
         addReadersJMenuItem.addActionListener(this);
         showAndEditReadersJMenuItem.addActionListener(this);
-
-
         inventoryJMenu = new JMenu("Inventory");
         addBookJMenuItem = new JMenuItem("Add Book");
         withdrawBookJMenuItem = new JMenuItem("Withdraw Book");
@@ -71,31 +66,19 @@ public class LibraryDesktop extends JFrame implements ActionListener {
         inventoryJMenu.add(withdrawBookJMenuItem);
         addBookJMenuItem.addActionListener(this);
         withdrawBookJMenuItem.addActionListener(this);
-
         bookDatabaseJMenu = new JMenu("Book database");
         bookDatabaseJMenuItem = new JMenuItem("Book Database");
         bookDatabaseJMenu.add(bookDatabaseJMenuItem);
         bookDatabaseJMenu.addActionListener(this);
         bookDatabaseJMenuItem.addActionListener(this);
-
-        settingsJMenu = new JMenu("Settings");
-        yourProfileJMenuItem = new JMenuItem("Your Profile");
-        maxRentJMenuItem = new JMenuItem("Maximal renting time");
-        feeForOverKeepingJMenuItem = new JMenuItem("Overkeeping fee");
-        settingsJMenu.add(yourProfileJMenuItem);
-        settingsJMenu.add(maxRentJMenuItem);
-        settingsJMenu.add(feeForOverKeepingJMenuItem);
-        yourProfileJMenuItem.addActionListener(this);
-        maxRentJMenuItem.addActionListener(this);
-        feeForOverKeepingJMenuItem.addActionListener(this);
         JMenuBar menu = new JMenuBar();
-
         menu.add(staffJMenu);
         menu.add(readersJMenu);
         menu.add(libraryJMenu);
         menu.add(inventoryJMenu);
         menu.add(bookDatabaseJMenu);
-        menu.add(settingsJMenu);
+
+//        menu.add(settingsJMenu);
         this.setJMenuBar(menu);
     }
     @Override
@@ -121,7 +104,6 @@ public class LibraryDesktop extends JFrame implements ActionListener {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
-
         }
         else if (e.getSource() == borrowBookJMenuItem) {
             new BorrowBook();
@@ -129,29 +111,17 @@ public class LibraryDesktop extends JFrame implements ActionListener {
         else if (e.getSource() == giveBackBookJMenuItem) {
             new ReturnBook();
         }
-        else if (e.getSource() == addReadersJMenuItem) {
-            System.out.println("add readers");
-
-        }
-        else if (e.getSource() == showAndEditReadersJMenuItem) {
-            System.out.println("show and reader");
-        }
         else if (e.getSource() == addBookJMenuItem) {
-            System.out.println("dodano książke");
             new NewCopy();
-
         }
         else if (e.getSource() == withdrawBookJMenuItem) {
             new WithdrawBook();
         }
         else if (e.getSource() == bookDatabaseJMenuItem) {
             new BookDatabase();
-            System.out.println("new book database");
+
         }
-        else if (e.getSource() == yourProfileJMenuItem) {}
-        else if (e.getSource() == maxRentJMenuItem) {}
-        else if (e.getSource() == feeForOverKeepingJMenuItem) {}
-            else {JOptionPane.showMessageDialog(null, "coś poszło nie tak");}
+            else {JOptionPane.showMessageDialog(null, "something went wrong, my friend :) ");}
         }
     public static void main(String[] args) {
         new LibraryDesktop(null).setVisible(true);

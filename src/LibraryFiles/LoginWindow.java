@@ -37,20 +37,16 @@ public class LoginWindow extends JFrame implements ActionListener {
         this.add(clearButton);
         loginButton.addActionListener(this);
         clearButton.addActionListener(this);
-
-
-        Dimension rozdzielnosc = Toolkit.getDefaultToolkit().getScreenSize();
-        int widthScreen = (int) rozdzielnosc.getWidth();
-        int highScreen = (int) rozdzielnosc.getHeight();
+        Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+        int widthScreen = (int) resolution.getWidth();
+        int highScreen = (int) resolution.getHeight();
         int widthWindow = 400;
         int hightWindow = 310;
-
         this.setLayout(new BorderLayout());
         this.setSize(widthWindow, hightWindow);
         this.setLocation(widthScreen / 2 - widthWindow / 2, highScreen / 2 - hightWindow / 2);
         this.setVisible(true);
     }
-
     public static void main(String[] args) {
         new LoginWindow().setVisible(true);
     }
@@ -58,13 +54,9 @@ public class LoginWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton){
-
             if (DatabaseConnector.logginService(loginTextField.getText(), passwordField.getText())){
-                new LibraryDesktop(loginTextField.getText()).setVisible(true);
-            }
-            else{
-
-            }
+                new LibraryDesktop(loginTextField.getText()).setVisible(true);}
+                this.setVisible(false);
         } else if (e.getSource() == clearButton) {
             this.loginTextField.setText("");
             this.passwordField.setText("");

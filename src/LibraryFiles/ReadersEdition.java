@@ -98,7 +98,7 @@ public class ReadersEdition {
         readersTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-//                wrzuca dane z tabeli do JFieldów
+//                fetching data to JFields
                 int selectedRow = readersTable.getSelectedRow();
                 TableModel tableModel = readersTable.getModel();
                 idReaderTextField.setText(String.valueOf(tableModel.getValueAt(selectedRow, 0)));
@@ -109,67 +109,7 @@ public class ReadersEdition {
                 postcodeTextField.setText((String) tableModel.getValueAt(selectedRow, 5));
                 cityTextField.setText((String) tableModel.getValueAt(selectedRow, 6));
 
-//                addButton.addActionListener(new ActionListener() {
-//                    @Override
-//                    public void actionPerformed(ActionEvent e) {
 //
-//
-//                        String name = nameTextField.getText();
-//                        String surname = surnameTextField.getText();
-//                        String address = addressTextField.getText();
-//                        String postcode = postcodeTextField.getText();
-//                        String city = cityTextField.getText();
-//
-
-//                           wpisuje rekord do stafflist
-//                        String sqlQuery3 = "insert into readerslist (`name`, `surname`, `address`, `postcode`, `city`) VALUES ('%s', '%s', '%s', '%s', '%s')";
-//                        String sqlQuery3Formatted = String.format(sqlQuery3, name, surname, address, postcode, city);
-//                        DatabaseConnector databaseConnector = new DatabaseConnector(sqlQuery3Formatted);
-//                        JOptionPane.showMessageDialog(null, "Dodano czytelnika");
-//
-//                        try {
-//                            fetchTable();
-//                        } catch (SQLException ex) {
-//                            throw new RuntimeException(ex);
-//                        }
-//                        idReaderTextField.setText("");
-//                        nameTextField.setText("");
-//                        surnameTextField.setText("");
-//                        addressTextField.setText("");
-//                        postcodeTextField.setText("");
-//                        cityTextField.setText("");
-//                        nameTextField.requestFocus();
-//                    }
-//                });
-//                updateButton.addActionListener(new ActionListener() {
-//                    @Override
-//                    public void actionPerformed(ActionEvent e) {
-//                        int number = Integer.parseInt(idReaderTextField.getText());
-//                        String name = nameTextField.getText();
-//                        String surname = surnameTextField.getText();
-//                        String address = addressTextField.getText();
-//                        String postcode = postcodeTextField.getText();
-//                        String city = cityTextField.getText();
-//
-//                        String sqlQuery = String.format("UPDATE `readerslist` SET " +
-//                                        "`name`='%s'," +
-//                                        "`surname`='%s'," +
-//                                        "`address`='%s'," +
-//                                        "`postcode`='%s'," +
-//                                        "`city`='%s'," +
-//                                        "WHERE idReader = '%s';",
-//                                name, surname, address, postcode, city, number);
-//                        DatabaseConnector databaseConnector1 = new DatabaseConnector(sqlQuery);
-//                String sqlQuery1 = String.format("UPDATE `loggintable` SET `login`='%s' WHERE id_worker = '%d'; ", login, Integer.parseInt(idReaderTextField.getText()));
-//                DatabaseConnector databaseConnector2 = new DatabaseConnector(sqlQuery1);
-
-//                        try {
-//                            fetchTable();
-//                        } catch (SQLException ex) {
-//                            throw new RuntimeException(ex);
-//                        }
-//                    }
-//                });
                 clearButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -183,7 +123,6 @@ public class ReadersEdition {
                         nameTextField.requestFocus();
                     }
                 });
-
             }
         });
         addButton.addMouseListener(new MouseAdapter() {
@@ -197,12 +136,11 @@ public class ReadersEdition {
                 String city = cityTextField.getText();
                 String idReader = surname + "_" + name + "_" + pesel;
 
-
-//                           wpisuje rekord do stafflist
+//                           adding record to stafflist table
                 String sqlQuery3 = "insert into readerslist (`idReader`,`name`, `surname`,`Pesel`, `address`, `postcode`, `city`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
                 String sqlQuery3Formatted = String.format(sqlQuery3, idReader, name, surname, pesel, address, postcode, city);
                 DatabaseConnector databaseConnector = new DatabaseConnector(sqlQuery3Formatted);
-                JOptionPane.showMessageDialog(null, "Dodano czytelnika");
+                JOptionPane.showMessageDialog(null, "readers added");
 
                 try {
                     fetchTable();
@@ -229,7 +167,6 @@ public class ReadersEdition {
                         String address = addressTextField.getText();
                         String postcode = postcodeTextField.getText();
                         String city = cityTextField.getText();
-
                         String sqlQuery = String.format("UPDATE `readerslist` SET " +
                                         "`name`='%s'," +
                                         "`surname`='%s'," +

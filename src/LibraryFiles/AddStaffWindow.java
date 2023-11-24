@@ -1,12 +1,9 @@
 package LibraryFiles;
 
 import javax.swing.*;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class AddStaffWindow extends JFrame implements ActionListener {
 
@@ -94,10 +91,7 @@ public class AddStaffWindow extends JFrame implements ActionListener {
 //        listeners
         addButton.addActionListener(this);
         cancelButton.addActionListener(this);
-
     }
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addButton){
@@ -112,7 +106,6 @@ public class AddStaffWindow extends JFrame implements ActionListener {
             userType = userTypeChoice.getSelectedItem();
 
             if (DatabaseConnector.loginChecker(login)) {
-
                 queryGenerator1 = String.format("insert into stafflist" +
                                 "(`name`, `surname`, `address`, `postcode`, `city`) VALUES ('%s', '%s', '%s', '%s', '%s')",
                         name, surname, address, postcode, city);
@@ -120,7 +113,6 @@ public class AddStaffWindow extends JFrame implements ActionListener {
                                 "(`login`, `password`, `userType`) VALUES ('%s', '%s', '%s')", login, password, userType);
                 DatabaseConnector databaseConnector1 = new DatabaseConnector(queryGenerator1);
                 DatabaseConnector databaseConnector2 = new DatabaseConnector(queryGenerator2);
-
                 this.setVisible(false);
             }
             else{
@@ -128,7 +120,6 @@ public class AddStaffWindow extends JFrame implements ActionListener {
                 passwordTextField.setText("");
                 JOptionPane.showMessageDialog(null, "Login jest zajęty");
             }
-
         }
         else {
             nameTextField.setText("");
@@ -139,10 +130,7 @@ public class AddStaffWindow extends JFrame implements ActionListener {
             cityTextField.setText("");
         }
     }
-
     public static void main(String[] args) {
         new AddStaffWindow();
     }
-
-
 }
