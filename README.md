@@ -6,7 +6,7 @@ To Ćwiczenie jest próbą zastosowania JDBC w prawdziwym życiu, ćwiczeniem, k
 
 Jak Uruchomić program?
 
-Aby uruchomić program należy zainstalować Xampp'a oraz MySQL'a. Następnie należy uruchomić Apache i MySQL. Aby program skutecznie się połączył z bazą należy się upewnić czy wpisany został dobry host.
+Aby uruchomić program należy zainstalować Xampp'a oraz MySQL'a. Następnie należy uruchomić Apache i MySQL. Aby program skutecznie się połączył z bazą należy się upewnić czy wpisany został dobry host oraz parametry bazy będą się zgadzać z poniższym. W razie potrzeby można edytować parametry połączenia w Klasie DatabaseConnector.
 Niezbędne parametry:
 url: jdbc:mysql://localhost:3306/librarytest
 uname: root
